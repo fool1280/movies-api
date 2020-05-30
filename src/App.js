@@ -44,6 +44,28 @@ function App() {
     }
   }
 
+  function sortMoviePopular(x) {
+    if (!(movieList === null)) {
+      movieList.sort(function(a, b) {
+        let i = a.popularity;
+        let j = b.popularity;
+        console.log(i,j);
+        return (i-j)*x;
+      })
+      setMovieList([...movieList]);
+      console.log("Sorted", movieList)
+    }
+  }
+
+  let getTopRated = async() => {
+    let url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}&language=en-US&page=1`;
+    let data = await fetch (url);
+    let result = await data.json();
+    setMovieList([...result.results]);
+    console.log("Movie", result.results);
+  }
+
+
   useEffect(() => {
     getNowPlaying();
   }, [])
@@ -63,11 +85,14 @@ function App() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <Nav.Link href="#current">Current Playing</Nav.Link>
-            <Nav.Link href="#toprated">Top Rated</Nav.Link>
+            <Nav.Link href="#current" onClick={() => getNowPlaying()}>Current Playing</Nav.Link>
+            <Nav.Link href="#toprated" onClick={() => getTopRated()}>Top Rated</Nav.Link>
             <NavDropdown title="Sort By" id="basic-nav-dropdown">
               <NavDropdown.Item onClick={() => sortMovieRating(-1)}>High Rating to Low Rating</NavDropdown.Item>
               <NavDropdown.Item onClick={() => sortMovieRating(1)}>Low Rating to High Rating</NavDropdown.Item>
+              <NavDropdown.Divider/>
+              <NavDropdown.Item onClick={() => sortMoviePopular(-1)}>Most Popular to Least Popular</NavDropdown.Item>
+              <NavDropdown.Item onClick={() => sortMoviePopular(1)}>Least Popular to Most Popular</NavDropdown.Item>
             </NavDropdown>
           </Nav>
           <Form inline>
