@@ -70,11 +70,11 @@ function App() {
               <NavDropdown.Item onClick={() => sortMovieRating(1)}>Low Rating to High Rating</NavDropdown.Item>
             </NavDropdown>
           </Nav>
+          <Form inline>
+            <FormControl id="keyword" onChange={field => {searchContent = field.target.value;}} type="text" placeholder="Search" className="mr-sm-2" />
+            <Button variant="dark" onClick={() => getKeyword(searchContent)}>Search</Button>
+          </Form>
         </Navbar.Collapse>
-        <Form inline>
-          <FormControl id="keyword" onChange={field => {searchContent = field.target.value;}} type="text" placeholder="Search" className="mr-sm-2" />
-          <Button variant="dark" onClick={() => getKeyword(searchContent)}>Search</Button>
-        </Form>
       </Navbar> 
       <MovieList movieList = {movieList}/>
     </div>
