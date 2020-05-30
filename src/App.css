@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Chelsea+Market&display=swap');
+
+body {
+  font-family: 'Chelsea Market', cursive;
+  background-image: url("img/background-image.png");
+}
+
+.navbar-color {
+  background-color: rgba(0,0,0,0.7);
+}
