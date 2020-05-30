@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fab } from '@fortawesome/free-brands-svg-icons'
 import "bootstrap/dist/css/bootstrap.min.css";
 import MovieList from './components/MovieList';
 import { Navbar, Nav, NavDropdown, Form, FormControl, Button } from 'react-bootstrap';
 import './App.css';
+
+library.add(fab);
 
 const apiKey = process.env.REACT_APP_APIKEY;
 
