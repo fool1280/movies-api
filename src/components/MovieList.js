@@ -20,7 +20,6 @@ export default function MovieList(props) {
         if (!(temp === [])) {
             content.push(temp);
         }
-        console.log("Content", content);
     }
     formatMovie();
     return (

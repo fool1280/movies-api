@@ -8,3 +8,10 @@ body {
 .navbar-color {
   background-color: rgba(0,0,0,0.7);
 }
+
+.seemore {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}

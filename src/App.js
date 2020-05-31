@@ -3,7 +3,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import "bootstrap/dist/css/bootstrap.min.css";
 import MovieList from './components/MovieList';
-import { Navbar, Nav, NavDropdown, Form, FormControl, Button } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown, Form, FormControl, Button, Container } from 'react-bootstrap';
 import './App.css';
 
 library.add(fab);
@@ -12,23 +12,34 @@ const apiKey = process.env.REACT_APP_APIKEY;
 
 function App() {
   let [movieList, setMovieList] = useState(null);
+  let [nowPlaying, setNowPlaying] = useState(false);
+  let [nowRated, setNowRated] = useState(false);
+  let [nowKeyword, setNowKeyword] = useState(false);
+  let [page, setPage] = useState(1);
+  let [keyword, setKeyword] = useState('');
   let searchContent = '';
 
   const getNowPlaying = async() => {
     let url = `https://api.themoviedb.org/3/movie/now_playing?api_key=${apiKey}&language=en-US&page=1`;
     let data = await fetch (url);
     let result = await data.json();
+    //console.log("Movie", result);
     setMovieList([...result.results]);
-    console.log("Movie", result.results);
+    setNowPlaying(true);
+    setNowKeyword(false);
+    setNowRated(false);
   }
 
-  let getKeyword = async(keyword) => {
+  const getKeyword = async(keyword) => {
     let url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=en-US&query=${keyword}&page=1&include_adult=false`;
     let data = await fetch (url);
     let result = await data.json();
     setMovieList([...result.results]);
-    console.log("Movie", result.results);
     document.getElementById("keyword").value = null;
+    setNowPlaying(false);
+    setNowKeyword(true);
+    setNowRated(false);
+    setKeyword(keyword);
   }
 
   function sortMovieRating(x) {
@@ -40,7 +51,7 @@ function App() {
         return (i-j)*x;
       })
       setMovieList([...movieList]);
-      console.log("Sorted", movieList)
+      //console.log("Sorted", movieList)
     }
   }
 
@@ -53,16 +64,46 @@ function App() {
         return (i-j)*x;
       })
       setMovieList([...movieList]);
-      console.log("Sorted", movieList)
+      //console.log("Sorted", movieList)
     }
   }
 
-  let getTopRated = async() => {
+  const getTopRated = async() => {
     let url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}&language=en-US&page=1`;
     let data = await fetch (url);
     let result = await data.json();
     setMovieList([...result.results]);
-    console.log("Movie", result.results);
+    //console.log("Movie", result.results);
+    setNowPlaying(false);
+    setNowKeyword(false);
+    setNowRated(true);
+  }
+
+  let getSeeMore = async(page) => {
+    console.log(page);
+    if (page === 0) return;
+    let url;
+    if (nowPlaying) {
+      url = `https://api.themoviedb.org/3/movie/now_playing?api_key=${apiKey}&language=en-US&page=${page}`;
+    } 
+    else if (nowKeyword) {
+      url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=en-US&query=${keyword}&page=${page}&include_adult=false`;
+    }
+    else if (nowRated) {
+      url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}&language=en-US&page=${page}`;
+    }
+    try {
+      let data = await fetch (url);
+      let result = await data.json();
+      setMovieList([...result.results]);
+      setPage(page);
+      console.log(`Now Playing ${nowPlaying}, Now Rated ${nowRated}, Now Keyword ${nowKeyword}`)
+      console.log(url);
+    } catch (error) {
+      alert("End of page!")
+    }
+    
+
   }
 
 
@@ -79,7 +120,6 @@ function App() {
   console.log(searchContent);
   return (
     <div>
-      <link href={"https://fonts.googleapis.com/css2?family=Chelsea+Market&display=swap"} rel="stylesheet"></link>
       <Navbar className="navbar-color" variant="dark" expand="lg" sticky="top">
         <Navbar.Brand href="#home">Henry's Corner</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -102,6 +142,10 @@ function App() {
         </Navbar.Collapse>
       </Navbar> 
       <MovieList movieList = {movieList}/>
+      <Container className="seemore">
+        <Button variant="dark" className="m-3 mb-5" onClick={() => getSeeMore(page-1)}>Previous</Button>
+        <Button variant="dark" className="m-3 mb-5" onClick={() => getSeeMore(page+1)}>Next</Button>
+      </Container>
     </div>
   );
 }
