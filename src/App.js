@@ -17,8 +17,17 @@ function App() {
   let [nowKeyword, setNowKeyword] = useState(false);
   let [page, setPage] = useState(1);
   let [keyword, setKeyword] = useState('');
+  let [genre, setGenre] = useState(null);
   let searchContent = '';
 
+  const getGenre = async() => {
+    let url = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=en-US`;
+    let data = await fetch (url);
+    let result = await data.json();
+    //console.log("Genres", result);
+    setGenre(result.genres);
+    getNowPlaying();
+  }
   const getNowPlaying = async() => {
     let url = `https://api.themoviedb.org/3/movie/now_playing?api_key=${apiKey}&language=en-US&page=1`;
     let data = await fetch (url);
@@ -80,7 +89,7 @@ function App() {
   }
 
   let getSeeMore = async(page) => {
-    console.log(page);
+    //console.log(page);
     if (page === 0) return;
     let url;
     if (nowPlaying) {
@@ -100,7 +109,7 @@ function App() {
       console.log(`Now Playing ${nowPlaying}, Now Rated ${nowRated}, Now Keyword ${nowKeyword}`)
       console.log(url);
     } catch (error) {
-      alert("End of page!")
+      alert("Not found!")
     }
     
 
@@ -108,7 +117,7 @@ function App() {
 
 
   useEffect(() => {
-    getNowPlaying();
+    getGenre();
   }, [])
   if (movieList === null) {
     return (
@@ -117,7 +126,6 @@ function App() {
       </div>
     )
   }
-  console.log(searchContent);
   return (
     <div>
       <Navbar className="navbar-color" variant="dark" expand="lg" sticky="top">
@@ -141,7 +149,7 @@ function App() {
           </Form>
         </Navbar.Collapse>
       </Navbar> 
-      <MovieList movieList = {movieList}/>
+      <MovieList movieList = {movieList} genreList = {genre}/>
       <Container className="seemore">
         <Button variant="dark" className="m-3 mb-5" onClick={() => getSeeMore(page-1)}>Previous</Button>
         <Button variant="dark" className="m-3 mb-5" onClick={() => getSeeMore(page+1)}>Next</Button>
