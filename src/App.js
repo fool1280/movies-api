@@ -114,6 +114,19 @@ function App() {
   }
 
   let sortMovieGenre = (currentGenre) => {
+    try {
+      console.log(currentGenre);
+      let temp = movieList.filter((movie) => {
+        let x = movie.genre_ids.includes(currentGenre);
+        console.log(x);
+      return x;
+      })
+      console.log(temp);
+      if (temp.length === 0) throw "No current movies are in this genre."
+      setMovieList(temp);
+    } catch (error) {
+      alert(error);
+    }
     
   }
 
@@ -147,7 +160,7 @@ function App() {
             <NavDropdown title="Genres" id="basic-nav-dropdown">
               {genre.map((item) => {
                 return(
-                <NavDropdown.Item onClick={() => sortMovieGenre(item.id)}>{item.name}</NavDropdown.Item>
+                <NavDropdown.Item key={item.id} onClick={() => sortMovieGenre(item.id)}>{item.name}</NavDropdown.Item>
                 );
               })}
             </NavDropdown>

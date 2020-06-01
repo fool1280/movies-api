@@ -37,7 +37,7 @@ export default function MovieList(props) {
                                 if (genreTotal.length === 0) {
                                     genreTotal.push({name: "Unidentified :("});
                                 }
-                                console.log(movie);
+                                //console.log(movie);
                                 let description = movie.overview.split(" ").slice(0, 15);
                                 //console.log(description);
                                 //console.log(genreTotal);
