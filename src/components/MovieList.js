@@ -39,7 +39,7 @@ export default function MovieList(props) {
                                 }
                                 console.log(movie);
                                 let description = movie.overview.split(" ").slice(0, 15);
-                                console.log(description);
+                                //console.log(description);
                                 //console.log(genreTotal);
                                 return (
                                     <Col className="d-flex" key={movie.id} sm="4">
@@ -47,7 +47,6 @@ export default function MovieList(props) {
                                             <Card.Img variant="top" src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2${movie.poster_path}`} />
                                             <Card.Body>
                                                 <Card.Title>{movie.original_title}</Card.Title>
-
                                                 <ListGroup variant="flush">
                                                     <ListGroup.Item>
                                                         {description.map((word, index) => {

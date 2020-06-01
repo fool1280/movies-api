@@ -111,8 +111,10 @@ function App() {
     } catch (error) {
       alert("Not found!")
     }
-    
+  }
 
+  let sortMovieGenre = (currentGenre) => {
+    
   }
 
 
@@ -141,6 +143,13 @@ function App() {
               <NavDropdown.Divider/>
               <NavDropdown.Item onClick={() => sortMoviePopular(-1)}>Most Popular to Least Popular</NavDropdown.Item>
               <NavDropdown.Item onClick={() => sortMoviePopular(1)}>Least Popular to Most Popular</NavDropdown.Item>
+            </NavDropdown>
+            <NavDropdown title="Genres" id="basic-nav-dropdown">
+              {genre.map((item) => {
+                return(
+                <NavDropdown.Item onClick={() => sortMovieGenre(item.id)}>{item.name}</NavDropdown.Item>
+                );
+              })}
             </NavDropdown>
           </Nav>
           <Form inline>
