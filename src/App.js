@@ -25,7 +25,7 @@ function App() {
   let [modalOpen, setOpen] = useState(false);
   let [movieId, setMovieId] = useState(null);
   let [videoId, setVideo] = useState(null);
-  let [rating, setRating] = useState(5);
+  let [rating, setRating] = useState(1);
   let [currentList, setCurrent] = useState(null);
   let searchContent = '';
 
@@ -216,7 +216,7 @@ function App() {
           draggableTrack
           step={1}
           maxValue={10}
-          minValue={0}
+          minValue={1}
           value={rating}
           onChange={value => setRating(value)}
           onChangeComplete={() => filterMovieRating(rating)} className="input-range"/>
