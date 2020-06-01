@@ -3,6 +3,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import "bootstrap/dist/css/bootstrap.min.css";
 import MovieList from './components/MovieList';
+import PlayTrailer from './components/PlayTrailer';
 import ReactModal from 'react-modal';
 import { Navbar, Nav, NavDropdown, Form, FormControl, Button, Container } from 'react-bootstrap';
 import './App.css';
@@ -20,6 +21,8 @@ function App() {
   let [keyword, setKeyword] = useState('');
   let [genre, setGenre] = useState(null);
   let [modalOpen, setOpen] = useState(false);
+  let [movieId, setMovieId] = useState(null);
+  let [videoId, setVideo] = useState(null);
   let searchContent = '';
 
   const getGenre = async() => {
@@ -117,13 +120,11 @@ function App() {
 
   let sortMovieGenre = (currentGenre) => {
     try {
-      console.log(currentGenre);
       let temp = movieList.filter((movie) => {
         let x = movie.genre_ids.includes(currentGenre);
         console.log(x);
       return x;
       })
-      console.log(temp);
       if (temp.length === 0) return;
       setMovieList(temp);
     } catch (error) {
@@ -136,8 +137,16 @@ function App() {
     setOpen(false);
   }
 
-  let openModal = () => {
+  let openModal = (id) => {
     setOpen(true);
+    setMovieId(id);
+  }
+
+  let getTrailer = async(id) => {
+    let url = `https://api.themoviedb.org/3/movie/${id}}/videos?api_key=${apiKey}&language=en-US`;
+    let data = await fetch (url);
+    let result = await data.json();
+    setVideo(result.results);
   }
 
   useEffect(() => {
@@ -182,8 +191,8 @@ function App() {
       </Navbar> 
       <Container>
         <MovieList movieList = {movieList} genreList = {genre} Modal={openModal}/>
-        <ReactModal isOpen={modalOpen}>
-          <button onClick={() => closeModal()}>Close</button>
+        <ReactModal isOpen={modalOpen} ariaHideApp={false} onAfterOpen={() => getTrailer(movieId)}>
+          <PlayTrailer close={closeModal} id={videoId}></PlayTrailer>
         </ReactModal>
       </Container>
       

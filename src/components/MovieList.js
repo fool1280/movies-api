@@ -23,7 +23,6 @@ export default function MovieList(props) {
     }
 
     formatMovie();
-    console.log(props.genreList);
     return (
         <div>
             <Container fluid="md">
@@ -69,7 +68,7 @@ export default function MovieList(props) {
                                                         })}
                                                     </ListGroup.Item>
                                                     <ListGroup.Item>
-                                                        <Card.Link href="#" onClick={() => props.Modal()}>Watch Trailer</Card.Link>
+                                                        <Card.Link href="#" onClick={() => props.Modal(movie.id)}>Watch Trailer</Card.Link>
                                                     </ListGroup.Item>
                                                 </ListGroup>
                                             </Card.Body>
