@@ -68,6 +68,9 @@ export default function MovieList(props) {
                                                             } else return (`${title.name}, `)
                                                         })}
                                                     </ListGroup.Item>
+                                                    <ListGroup.Item>
+                                                        <Card.Link href="#" onClick={() => props.Modal()}>Watch Trailer</Card.Link>
+                                                    </ListGroup.Item>
                                                 </ListGroup>
                                             </Card.Body>
                                         </Card>

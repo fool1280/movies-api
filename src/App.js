@@ -3,6 +3,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import "bootstrap/dist/css/bootstrap.min.css";
 import MovieList from './components/MovieList';
+import ReactModal from 'react-modal';
 import { Navbar, Nav, NavDropdown, Form, FormControl, Button, Container } from 'react-bootstrap';
 import './App.css';
 
@@ -18,6 +19,7 @@ function App() {
   let [page, setPage] = useState(1);
   let [keyword, setKeyword] = useState('');
   let [genre, setGenre] = useState(null);
+  let [modalOpen, setOpen] = useState(false);
   let searchContent = '';
 
   const getGenre = async() => {
@@ -122,7 +124,7 @@ function App() {
       return x;
       })
       console.log(temp);
-      if (temp.length === 0) throw "No current movies are in this genre."
+      if (temp.length === 0) return;
       setMovieList(temp);
     } catch (error) {
       alert(error);
@@ -130,6 +132,13 @@ function App() {
     
   }
 
+  let closeModal = () => {
+    setOpen(false);
+  }
+
+  let openModal = () => {
+    setOpen(true);
+  }
 
   useEffect(() => {
     getGenre();
@@ -171,7 +180,13 @@ function App() {
           </Form>
         </Navbar.Collapse>
       </Navbar> 
-      <MovieList movieList = {movieList} genreList = {genre}/>
+      <Container>
+        <MovieList movieList = {movieList} genreList = {genre} Modal={openModal}/>
+        <ReactModal isOpen={modalOpen}>
+          <button onClick={() => closeModal()}>Close</button>
+        </ReactModal>
+      </Container>
+      
       <Container className="seemore">
         <Button variant="dark" className="m-3 mb-5" onClick={() => getSeeMore(page-1)}>Previous</Button>
         <Button variant="dark" className="m-3 mb-5" onClick={() => getSeeMore(page+1)}>Next</Button>
