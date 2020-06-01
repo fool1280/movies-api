@@ -9,7 +9,16 @@ export default function PlayTrailer(props) {
     if (props.id === null) {
         return(
             <div>
-                Loading...
+                <button className="mb-2" style={{display: "block"}} onClick={() => props.close()}>Close</button>
+                <p>Loading...</p>
+            </div>
+        )
+    }
+    if (props.id.length === 0) {
+        return(
+            <div>
+                <button className="mb-2" style={{display: "block"}} onClick={() => props.close()}>Close</button>
+                <p>There is no trailer currently available.</p>
             </div>
         )
     }

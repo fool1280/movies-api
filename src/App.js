@@ -4,9 +4,11 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 import "bootstrap/dist/css/bootstrap.min.css";
 import MovieList from './components/MovieList';
 import PlayTrailer from './components/PlayTrailer';
+import "react-input-range/lib/css/index.css";
 import ReactModal from 'react-modal';
 import { Navbar, Nav, NavDropdown, Form, FormControl, Button, Container } from 'react-bootstrap';
 import './App.css';
+import InputRange from 'react-input-range';
 
 library.add(fab);
 
@@ -23,6 +25,8 @@ function App() {
   let [modalOpen, setOpen] = useState(false);
   let [movieId, setMovieId] = useState(null);
   let [videoId, setVideo] = useState(null);
+  let [rating, setRating] = useState(5);
+  let [currentList, setCurrent] = useState(null);
   let searchContent = '';
 
   const getGenre = async() => {
@@ -39,6 +43,7 @@ function App() {
     let result = await data.json();
     //console.log("Movie", result);
     setMovieList([...result.results]);
+    setCurrent([...result.results]);
     setNowPlaying(true);
     setNowKeyword(false);
     setNowRated(false);
@@ -54,6 +59,7 @@ function App() {
     setNowKeyword(true);
     setNowRated(false);
     setKeyword(keyword);
+    setCurrent([...result.results]);
   }
 
   function sortMovieRating(x) {
@@ -82,6 +88,20 @@ function App() {
     }
   }
 
+  function filterMovieRating(x) {
+    console.log(rating);
+    console.log(currentList);
+    if (currentList.length>0) {
+      movieList = currentList;
+      let temp = movieList.filter((item) => {
+        let y = (item.vote_average>=x);
+        console.log(y);
+        return (y);
+      })
+      setMovieList(temp);
+    }
+  }
+
   const getTopRated = async() => {
     let url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}&language=en-US&page=1`;
     let data = await fetch (url);
@@ -91,6 +111,7 @@ function App() {
     setNowPlaying(false);
     setNowKeyword(false);
     setNowRated(true);
+    setCurrent([...result.results]);
   }
 
   let getSeeMore = async(page) => {
@@ -113,6 +134,7 @@ function App() {
       setPage(page);
       console.log(`Now Playing ${nowPlaying}, Now Rated ${nowRated}, Now Keyword ${nowKeyword}`)
       console.log(url);
+      setCurrent([...result.results]);
     } catch (error) {
       alert("Not found!")
     }
@@ -189,9 +211,19 @@ function App() {
           </Form>
         </Navbar.Collapse>
       </Navbar> 
+      <form className="form">
+        <InputRange
+          draggableTrack
+          step={1}
+          maxValue={10}
+          minValue={0}
+          value={rating}
+          onChange={value => setRating(value)}
+          onChangeComplete={() => filterMovieRating(rating)} className="input-range"/>
+      </form>
       <Container>
         <MovieList movieList = {movieList} genreList = {genre} Modal={openModal}/>
-        <ReactModal isOpen={modalOpen} ariaHideApp={false} onAfterOpen={() => getTrailer(movieId)}>
+        <ReactModal isOpen={modalOpen} ariaHideApp={false} onAfterOpen={() => getTrailer(movieId)} closeTimeoutMS={1000}>
           <PlayTrailer close={closeModal} id={videoId}></PlayTrailer>
         </ReactModal>
       </Container>

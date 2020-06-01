@@ -28,3 +28,39 @@ body {
   justify-content: center;
   margin: 0 auto;
 }
+
+.ReactModal__Overlay {
+  opacity: 0;
+  transition: opacity 1000ms ease-in-out;
+}
+
+.ReactModal__Overlay--after-open{
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close{
+  opacity: 0;
+}
+
+.form {
+  margin: 50px 38%;
+  padding: 30px;
+}
+
+.input-range__track--active {
+  background: orange !important;
+  border-color: orange !important;
+}
+.input-range__slider {
+  background: white !important;
+  border-color: white !important;
+}
+
+.input-range__slider-container { transition: none; }
+.input-range__track {
+  transition: none;
+}
+
+.input-range__label, .input-range__label--min, .input-range__label, .input-range__label--max{
+  color: white;
+}
